@@ -6,11 +6,16 @@ import {
     LOGIN_SUCCESS,
     LOGIN_FAIL,
     LOGOUT,
+    UPDATE_LOGIN_ATTEMPTS,
 } from "../actions/types"
 
 const user =JSON.parse(localStorage.getItem("user"));
 
-const initialState = user ? {isLoggedIn: true, user} : {isLoggedIn:false, user: null};
+const initialState = {
+    user : user ? {isLoggedIn: true, user} : {isLoggedIn:false, user: null},
+    loginAttempts: 0,
+    delayLogin: false,
+};
 
 export default function (state = initialState, action) {
     const{type, payload} = action;
@@ -36,11 +41,22 @@ export default function (state = initialState, action) {
             };
             
         case LOGIN_FAIL:
-            return{
-                ...state,
-                isLoggedIn: false,
-                user: null,
-            };
+            if(state.loginAttempts >= 3){
+                return{
+                    ...state,
+                    isLoggedIn: false,
+                    user: null,
+                    delayLogin:  true,
+                    loginAttempts: 0
+                };
+            } else {return {
+                    ...state,
+                    isLoggedIn: false,
+                    user: null,
+                    delayLogin: false,
+                    loginAttempts: state.loginAttempts + 1
+            }}
+            
             
         case LOGOUT: 
             return{
@@ -48,7 +64,8 @@ export default function (state = initialState, action) {
                 isLoggedIn: false,
                 user: null,
             };
-         
+        
+        
         default:
             return state;    
     }
