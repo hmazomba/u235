@@ -65,19 +65,19 @@ class Register extends Component{
 
     onChangeUsername(e){
         this.setState({
-            username = e.target.value,
+            username: e.target.value,
         });
     }
 
     onChangeEmail(e){
         this.setState({
-            email = e.target.value,
+            email : e.target.value,
         });
     }
 
     onChangePassword(e){
         this.setState({
-            password = e.target.value,
+            password : e.target.value,
         });
     }
 

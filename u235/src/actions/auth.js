@@ -30,7 +30,7 @@ export const register = (username, email, password) => (dispatch) => {
             const message = 
                 (error.response && 
                 error.response.data &&
-                errror.response.data.message) ||
+                error.response.data.message) ||
                 error.message ||
                 error.toString();
 
@@ -58,7 +58,7 @@ export const login = (username, password) => (dispatch) => {
             const message = 
             (error.response && 
                 error.response.data &&
-                errror.response.data.message) ||
+                error.response.data.message) ||
                 error.message ||
                 error.toString();
             
