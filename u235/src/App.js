@@ -19,10 +19,10 @@ function App(){
         email: details.email
       })
     }
-    if(details.password.length < 8){
+    else if(details.password.length < 8){
       setError("Password must be 8 characters or more in length");
     }
-    if(!/\S+@\S+\.\S+/.test(details.email)){
+    else if(!/\S+@\S+\.\S+/.test(details.email)){
       setError("Invalid Email Address");
     }
     else{
