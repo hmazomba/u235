@@ -12,20 +12,40 @@ function App(){
 
   const Login = details => {
     console.log(details);
+    if(details.email == adminUser.email && details.password == adminUser.password){
+      console.log("Logged in");
+      setUser({
+        name: details.name,
+        email: details.email
+      })
+    }
+    if(details.password.length < 8){
+      setError("Password must be 8 characters or more in length");
+    }
+    if(!/\S+@\S+\.\S+/.test(details.email)){
+      setError("Invalid Email Address");
+    }
+    else{
+      console.log("Details do not match")
+      setError("Details do not match")
+    }
   }
 
   const Logout = () => {
-    console.log("logout");
+    setUser({
+      name: "",
+      email: ""
+    })
   }
   return (
     <div className="App">
       {(user.email != "") ? (
         <div className="welcome">
           <h2>Welcome, <span>{user.name}</span></h2>
-          <button>Logout</button>
+          <button onclick={Logout}>Logout</button>
         </div>
       ) : (
-        <LoginForm/>
+        <LoginForm Login={Login} error={error}/>
       )}
     </div>
   );
