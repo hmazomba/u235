@@ -1,8 +1,16 @@
-import React from 'react'
+import React, {useState} from 'react'
 
-function LoginForm() {
+function LoginForm({ Login, error}) {
+    //local details for the form
+    const [details, setDetails] = useState({name:"", email: "", password: ""})
+    //Handles all submissions in the form
+    const submitHandler = e =>{
+        e.preventDefault();
+        Login(details);
+    }
     return (
-        <form>
+        //Login form
+        <form onSubmit={submitHandler}>
             <div className="form-inner">
                 <h2>Login</h2>
                 {/*ERROR*/}
@@ -20,6 +28,8 @@ function LoginForm() {
                     <label htmlFor="password">Password: </label>
                     <input type="text" name="password" id="password"/>
                 </div>
+
+                <input type="submit" value="LOGIN"/>
             </div>
         </form>
     )
