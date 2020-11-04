@@ -4,20 +4,36 @@ function LoginForm({ Login, error}) {
     //local details for the form
     const [details, setDetails] = useState({name:"", email: "", password: ""})
     const [loginCount, setLoginCount] = useState(0);
-    
+    const [canLogin, setCanLogin] = useState(true);
+    const [seconds, setSeconds] = useState(0);
     //Timer
     useEffect(() => {
-        const timeout = setTimeout(() => {
-            setLoginCount(1);
-        }, 60000);
+        const interval = setInterval(() => {
+            setSeconds(seconds => seconds + 1);
+        }, 1000)
+        if(loginCount >= 3){
+            setCanLogin(false);
+        } 
+        
+        else if(loginCount >= 3 && seconds > 10){
+            setCanLogin(true);
+            setSeconds(0);            
+        } 
+        else {
+            clearInterval(interval);
+        }
+        
 
-        return () => clearTimeout(timeout);
-    }, [loginCount]);
+    }, [loginCount], [seconds]);
+
+    
     //Handles all submissions in the form
     const submitHandler = e =>{
         e.preventDefault();
         Login(details);
         setLoginCount(loginCount+1);
+        
+        
     }
 
 
@@ -27,6 +43,7 @@ function LoginForm({ Login, error}) {
             <div className="form-inner">
                 <h2>Login</h2>
                 <h3>Login Attempts: {loginCount}</h3>
+                <h3>Seconds: {seconds}</h3>
                 {(error) != "" ? (<div className="error">{error}</div>) : ""}
                 <div className="form-group">
                     <label htmlFor="name">Name: </label>
@@ -42,8 +59,7 @@ function LoginForm({ Login, error}) {
                     <label htmlFor="password">Password: </label>
                     <input type="text" name="password" id="password" onChange={e  => setDetails({...details, password: e.target.value})} value={details.password}/>
                 </div>
-
-                <input type="submit" value="LOGIN"/>
+                { canLogin ? (<input type="submit" value="LOGIN"/>) : ("")}
             </div>
         </form>
     )
