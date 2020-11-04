@@ -1,18 +1,32 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 
 function LoginForm({ Login, error}) {
     //local details for the form
     const [details, setDetails] = useState({name:"", email: "", password: ""})
+    const [loginCount, setLoginCount] = useState(0);
+    
+    //Timer
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setLoginCount(1);
+        }, 60000);
+
+        return () => clearTimeout(timeout);
+    }, [loginCount]);
     //Handles all submissions in the form
     const submitHandler = e =>{
         e.preventDefault();
         Login(details);
+        setLoginCount(loginCount+1);
     }
+
+
     return (
         //Login form
         <form onSubmit={submitHandler}>
             <div className="form-inner">
                 <h2>Login</h2>
+                <h3>Login Attempts: {loginCount}</h3>
                 {(error) != "" ? (<div className="error">{error}</div>) : ""}
                 <div className="form-group">
                     <label htmlFor="name">Name: </label>
