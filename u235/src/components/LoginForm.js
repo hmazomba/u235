@@ -8,23 +8,24 @@ function LoginForm({ Login, error}) {
     const [seconds, setSeconds] = useState(0);
     //Timer
     useEffect(() => {
-        const interval = setInterval(() => {
-            setSeconds(seconds => seconds + 1);
-        }, 1000)
-        if(loginCount >= 3){
-            setCanLogin(false);
-        } 
-        
-        else if(loginCount >= 3 && seconds > 10){
-            setCanLogin(true);
-            setSeconds(0);            
-        } 
-        else {
-            clearInterval(interval);
-        }
-        
+        const timeout = setTimeout(()=> {
+            setSeconds( seconds + 1);
+        }, 1000);
 
-    }, [loginCount], [seconds]);
+        if (canLogin){              
+            if(loginCount > 2 && seconds < 60){
+                setCanLogin(false)
+            }
+        } else if(!canLogin){
+            if(seconds > 60){
+                setCanLogin(true);                               
+            }
+        } else {
+            setSeconds(0);
+            clearTimeout(timeout);
+        } 
+        
+    }, [canLogin, seconds]);
 
     
     //Handles all submissions in the form
@@ -35,15 +36,15 @@ function LoginForm({ Login, error}) {
         
         
     }
-
+    
 
     return (
         //Login form
         <form onSubmit={submitHandler}>
             <div className="form-inner">
                 <h2>Login</h2>
-                <h3>Login Attempts: {loginCount}</h3>
-                <h3>Seconds: {seconds}</h3>
+                {!canLogin ? (<h3>Please wait 60 seconds</h3>) : ""}
+                {!canLogin ? (<h3>Seconds: {seconds}</h3>) : ""}
                 {(error) != "" ? (<div className="error">{error}</div>) : ""}
                 <div className="form-group">
                     <label htmlFor="name">Name: </label>
